@@ -1,6 +1,8 @@
 import config
 from flask_restful import fields
 
+from models.film_star import film_star
+
 db = config.db
 
 star_field = {
@@ -14,7 +16,7 @@ class Star(db.Model):
     name = db.Column(db.String(100), nullable=False)
     # relationship
 
-    film_star = db.relationship('FilmStar')
+    films = db.relationship('Film', secondary=film_star, back_populates='stars')
 
     def __repr__(self) -> str:
         return f"Star(director_id={self.star_id})"

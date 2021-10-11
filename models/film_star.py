@@ -12,13 +12,8 @@ film_star_field = {
     'star_id': fields.Integer
 }
 
-class FilmStar(db.Model):
-    __tablename__ = 'film_star'
-    film_id = db.Column(db.Integer, db.ForeignKey('user.username'), primary_key=True)
-    star_id = db.Column(db.Integer, db.ForeignKey('film.film_id'), primary_key=True)
-    # relationship
-
-    star = db.relationship('Star')
-
-    def __repr__(self) -> str:
-        return f"FilmStar(film_id={self.film_id}, star_id={self.star_id})"
+film_star = db.Table(
+    "film_star",
+    db.Column("star_id", db.Integer, db.ForeignKey("star.star_id")),
+    db.Column("film_id", db.Integer, db.ForeignKey("film.film_id")),
+)
