@@ -1,7 +1,10 @@
 from flask_restful import Api, Resource, marshal_with, abort, reqparse, fields
 import config
+from flask import jsonify
 from models.director import Director, director_field
 from models.film import Film, film_field
+
+from middleware import test_decorator, login_mdw
 
 app = config.app
 db = config.db
@@ -20,6 +23,7 @@ class Test(Resource):
         'name': fields.String,
     }
 
+    @test_decorator()
     @marshal_with(director_field)
     def get(self):
         result = Director.query.filter_by(director_id=1).first()
@@ -27,6 +31,12 @@ class Test(Resource):
         if not result:
             abort(404, message="Video doesnt exist")
         return result, 201
+
+@api.resource('/login')
+class Login(Resource):
+    @login_mdw()
+    def post(self):
+        return {'message': 'login successfull'}, 200
 
 @api.resource('/film/<int:film_id>')
 class FilmDetail(Resource):
